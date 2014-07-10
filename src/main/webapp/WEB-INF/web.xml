@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns="http://java.sun.com/xml/ns/j2ee" 
+    xmlns:web="http://java.sun.com/xml/ns/javaee" 
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
+    id="WebApp_ID" version="2.5">
+ 
+
+   <!-- DISPATCH SERVLET PER LE CHIAMATE REST GESTITE CON IL CONTROLLER -->
+  <servlet>
+      <servlet-name>base</servlet-name>
+      <servlet-class>
+         org.springframework.web.servlet.DispatcherServlet
+      </servlet-class>
+      <load-on-startup>1</load-on-startup>
+   </servlet>
+
+   <servlet-mapping>
+      <servlet-name>base</servlet-name>
+      <url-pattern>/rest/*</url-pattern>
+   </servlet-mapping>
+    
+   <context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/base-servlet.xml</param-value>
+	</context-param>
+	
+	<!-- DEFAULT SERVLET PER LE PAGINE STATICHE -->
+	
+   <servlet-mapping>   
+   	<servlet-name>default</servlet-name>
+    <url-pattern>/static/</url-pattern>
+   </servlet-mapping>
+  
+</web-app>
