@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		
+<title>Giuseppe | Login</title>
+<script type="text/javascript">
+//<![CDATA[
+try{if (!window.CloudFlare) {var CloudFlare=[{verbose:0,p:0,byc:0,owlid:"cf",bag2:1,mirage2:0,oracle:0,paths:{cloudflare:"/cdn-cgi/nexp/dokv=88e434a982/"},atok:"0c006ce519f64be736658a1a4e262263",petok:"57fc3ac019ebe298985cf2c9961159b12cd437aa-1405006587-1800",zone:"williamsyms.com",rocket:"a",apps:{}}];document.write('<script type="text/javascript" src="//ajax.cloudflare.com/cdn-cgi/nexp/dokv=97fb4d042e/cloudflare.min.js"><'+'\/script>');}}catch(e){};
+//]]>
+</script><script type="text/javascript" src="./Login_files/cloudflare.min.js"></script><style type="text/css"></style><style type="text/css">.cf-hidden { display: none; } .cf-invisible { visibility: hidden; }</style><script data-module="cloudflare/rocket" id="cfjs_block_23a87f9b35" onload="CloudFlare.__cfjs_block_23a87f9b35_load()" onerror="CloudFlare.__cfjs_block_23a87f9b35_error()" onreadystatechange="CloudFlare.__cfjs_block_23a87f9b35_readystatechange()" type="text/javascript" src="./Login_files/rocket.js"></script>
+
+
+<link href="./Login_files/fio.css" media="screen" rel="stylesheet" type="text/css">
+<link href="./Login_files/bs.css" media="screen" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<div id="login">
+		<div id="logo">
+			<a href="#" title="Your logo here"><img alt="Logo" height="144" src="./Login_files/logo_cloud.png" width="261"></a>
+		</div>
+			
+		<div id="v-login">
+			<div class="block center login small">
+				<div class="block_head">
+					<div class="bheadl"></div>
+					<div class="bheadr"></div>
+					<h2>Login</h2>
+					<ul>
+						<li><a href="">Home</a></li>
+						<li><a id="btn-register" href="" rel="tooltip" data-original-title="Non sei ancora registrato ?">Registrazione</a></li>
+					</ul>
+
+				</div>
+				<div class="block_content">
+					<form accept-charset="UTF-8" action="" class="new_user" id="new_user" method="post">
+						<label for="user_login">Username o email</label>
+						<input class="span5" id="user_login" name="user[login]" size="30" type="text">
+						<label for="user_password">Password</label>
+						<input class="span5" id="user_password" name="user[password]" size="30" type="password">
+						<p class="help-block"><a id="btn-recover" href="" rel="tooltip2" data-original-title="Not a problem!">Dimenticato la password?</a></p>
+						<div class="form-actions">
+							<div class="row">
+								<div class="span2" style="width:85px">
+									<input class="btn btn-primary btn-large" name="commit" type="submit" value="Entra">
+								</div>
+								<div class="span3" style="padding-top:10px">
+									<label class="checkbox" for="user_remember_me">
+									<input name="user[remember_me]" type="hidden" value="0">
+									<input id="user_remember_me" name="user[remember_me]" type="checkbox" value="1">Ricordami su questo computer</label>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="bendl"></div>
+				<div class="bendr"></div>
+			</div> 
+		</div> <!-- v-Login End -->
+		<div id="v-register" style="display: none;">
+			<div class="block center login small">
+				<div class="block_head">
+					<div class="bheadl"></div>
+					<div class="bheadr"></div>
+					<h2>Register</h2>
+					<ul>
+						<li><a href="">Home</a></li>
+						<li><a id="btn-login" href="" rel="tooltip" title="Already have an account?">Entra</a></li>
+					</ul>
+				</div>
+				<div class="block_content">
+					<form accept-charset="UTF-8" action="" class="new_user" id="new_user" method="post">
+						<label for="username">Username</label>
+						<input class="span5" id="username" name="username" size="30" type="text">
+						<label for="email">Email</label>
+						<input class="span5" id="email" name="email" size="30" type="text">
+						<label for="email2">Conferma Email</label>
+						<input class="span5" id="email2" name="email2" size="30" type="text">
+						<label for="password">Password</label>
+						<input class="span5" id="password" name="password" size="30" type="password">
+						<label for="password2">Conferma Password</label>
+						<input class="span5" id="password2" name="password2" size="30" type="password">
+						<div class="form-actions">
+							<div class="row">
+								<div class="span2" style="width:120px">
+									<input class="btn btn-primary btn-large" name="commit" type="submit" value="Create Account">
+								</div>
+								<div class="span2" style="padding-top:10px; width:200px">
+									<label class="checkbox" for="tos">
+									<input name="tos" type="hidden" value="0">
+									<input id="tos" name="tos" type="checkbox" value="1">Io accetto i<a href="">termini di servizio</a></label>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="bendl"></div>
+				<div class="bendr"></div>
+			</div>
+		</div> <!-- v-Register End -->
+		<div id="v-recover" style="display: none;">
+			<div class="block center login small">
+				<div class="block_head">
+					<div class="bheadl"></div>
+					<div class="bheadr"></div>
+					<h2>Password recovery</h2>
+					<ul>
+						<li><a href="">Home</a></li>
+						<li><a id="btn-login2" href="" rel="tooltip" title="You remember your password?">Entra</a></li>
+					</ul>
+
+				</div>
+				<div class="block_content">
+					<form accept-charset="UTF-8" action="" class="new_user" id="new_user" method="post">
+						<label for="user_login">Indirizzo Email</label>
+						<input class="span5" id="user_login" name="user[login]" size="30" type="text">
+						<div class="form-actions">
+							<div class="row">
+								<div class="span2" style="width:85px">
+									<input class="btn btn-primary btn-large" name="commit" type="submit" value="Invia email per recuperare la password">
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="bendl"></div>
+				<div class="bendr"></div>
+			</div>
+		</div> <!-- v-Recover End -->
+	</div>
+	<p class="ac">
+		<small>
+			Copyright 2012 © <a href="">Your Company</a>&nbsp;|&nbsp;<a href="">Aiuto</a>
+		</small>
+	</p>
+
+	<!-- Le javascript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script data-rocketsrc="js/jquery-2.0.2.min.js" type="text/rocketscript" data-rocketoptimized="true"></script><script type="text/javascript" src="./Login_files/jquery-2.0.2.min.js"></script>
+	<script data-rocketsrc="js/bootstrap.min.js" type="text/rocketscript" data-rocketoptimized="true"></script><script type="text/javascript" src="./Login_files/bootstrap.min.js"></script>
+	<script data-rocketsrc="js/application.js" type="text/rocketscript" data-rocketoptimized="true"></script><script type="text/javascript" src="./Login_files/application.js"></script>
+
+</body></html>
