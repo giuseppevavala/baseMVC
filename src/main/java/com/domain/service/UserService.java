@@ -31,4 +31,8 @@ public class UserService {
    	public List<UserPOJO> getAllUser() {		
    		return userDAO.getAll();
    	}
+
+	public void update(UserPOJO user) {
+		userDAO.update(user);
+	}
 }

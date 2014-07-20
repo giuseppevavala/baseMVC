@@ -20,6 +20,12 @@ public class UserPOJO {
 	private String password = "";
 	@Column(name="email")
 	private String email = "";
+	@Column(name="tokenRegister")
+	private String tokenRegister = "";
+	@Column(name="tokenRecoverPassword")
+	private String tokenRecoverPassword = "";
+	@Column(name="confirmRegistration")
+	private boolean confirmRegistration = false;
 	
 	
 	public String getUser() {
@@ -50,12 +56,30 @@ public class UserPOJO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	public String getTokenRegister() {
+		return tokenRegister;
+	}
+	public void setTokenRegister(String tokenRegister) {
+		this.tokenRegister = tokenRegister;
+	}
+	public String getTokenRecoverPassword() {
+		return tokenRecoverPassword;
+	}
+	public void setTokenRecoverPassword(String tokenRecoverPassword) {
+		this.tokenRecoverPassword = tokenRecoverPassword;
+	}
+	public boolean isConfirmRegistration() {
+		return confirmRegistration;
+	}
+	public void setConfirmRegistration(boolean confirmRegistration) {
+		this.confirmRegistration = confirmRegistration;
+	}
 	@Override
 	public String toString() {
 		return "UserPOJO [id=" + id + ", user=" + user + ", password="
-				+ password + ", email=" + email + "]";
+				+ password + ", email=" + email + ", tokenRegister="
+				+ tokenRegister + ", tokenRecoverPassword="
+				+ tokenRecoverPassword + ", confirmRegistration="
+				+ confirmRegistration + "]";
 	}
-	
-
-	
 }

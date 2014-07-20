@@ -47,7 +47,12 @@ public class LoginController{
 		   return "Login Error: non esiste user/mail";
 	   
 	   if (user.getPassword().equalsIgnoreCase(userObj.getPassword()))
-		   return "Login";
+	   {
+		   if (user.isConfirmRegistration())
+			   return "Login";
+		   else
+			   return "Login Error: Conferma la registrazione";   
+	   }
 	   else
 		   return "Login Error: Password sbagliata";
    }
