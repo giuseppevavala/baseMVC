@@ -11,7 +11,20 @@
 
    <!-- SCAN CONTROLLER -->
    <context:component-scan base-package="com.controller" />
+   <context:component-scan base-package="com.business" />
    <mvc:annotation-driven/>
+   
+   <!-- Moderl HTML -->
+   <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+      <property name="prefix" value="../static/" />
+      <property name="suffix" value=".jsp" />
+   </bean>
+   
+   <!-- Multipart/formdata -->
+
+   <bean id="multipartResolver"  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+   	<property name="maxUploadSize" value="5000000000"/>
+   </bean>
    
    <!-- 
    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -19,6 +32,10 @@
       <property name="suffix" value=".jsp" />
    </bean>
     -->
+    
+   <!-- FILE DI PROPERTIES -->
+   <context:property-placeholder location="classpath:base.properties" />
+   
     
    <!-- ***************************** HIBERNATE  ********************************** -->
    
@@ -58,6 +75,8 @@
             <property name="annotatedClasses">
 	            <list>
 	                  <value>com.domain.POJO.UserPOJO</value>
+	                  <value>com.domain.POJO.DigitalItemPOJO</value>
+	                  <value>com.domain.POJO.VideoFilePOJO</value>
 	            </list>
       		</property>
    </bean> 

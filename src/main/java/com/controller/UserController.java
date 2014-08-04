@@ -1,11 +1,9 @@
 package com.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
-import javax.mail.MessagingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +26,9 @@ public class UserController{
 	
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	SendEmail sendEmail;
 	
 	@PostConstruct
 	public void init() {
@@ -46,7 +47,7 @@ public class UserController{
 	   userObj.setTokenRegister(token);
 	   
 	   try {
-		SendEmail.SendEmailConfirmRegistration(userObj.getEmail(), userObj.getTokenRegister());
+		sendEmail.SendEmailConfirmRegistration(userObj.getEmail(), userObj.getTokenRegister());
 	   } catch (Exception e) {
 		   e.printStackTrace();
 		   return "Errore nell'invio della mail di registrazione";

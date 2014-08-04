@@ -12,27 +12,31 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.business.SaltedMd5;
+import com.domain.POJO.ResponsePOJO;
 import com.domain.POJO.UserPOJO;
 import com.domain.service.UserService;
 
 @Controller
 public class LoginController{
    // private static final int BUFSIZE = 4096;
-	private Logger logger  = LoggerFactory.getLogger(this.getClass());;
+   private Logger logger  = LoggerFactory.getLogger(this.getClass());
 	
-	@Autowired
-	UserService userService;
+   @Autowired
+   UserService userService;
 	
-	@PostConstruct
-	public void init() {
+   @PostConstruct
+   public void init() {
 		logger.debug("-------------- >>>>>>>>>>>>>>>>>>>>>> Login Controller <<<<<<<<<<<<<<<<<<<< ----------------");
-	}
+   }
 
    @RequestMapping(value="/login", method=RequestMethod.POST)
-   public @ResponseBody String login(
+   public @ResponseBody ResponsePOJO login(
 		   UserPOJO userObj,
 		   @RequestParam(value= "remember_me") String rememberMe ) 
    {
+	   ResponsePOJO resp = new ResponsePOJO();
+	   resp.setError(true);
+	   
 	   userObj.setUser(userObj.getUser().toUpperCase().trim());
 	   userObj.setEmail(userObj.getEmail().toUpperCase().trim());
 	   
@@ -44,17 +48,22 @@ public class LoginController{
 		   user = userService.getFromUser(userObj.getUser());
 	   
 	   if (user == null)
-		   return "Login Error: non esiste user/mail";
-	   
-	   if (user.getPassword().equalsIgnoreCase(userObj.getPassword()))
-	   {
-		   if (user.isConfirmRegistration())
-			   return "Login";
-		   else
-			   return "Login Error: Conferma la registrazione";   
-	   }
+		   resp.setMessagge("Non esiste user/mail");
 	   else
-		   return "Login Error: Password sbagliata";
+	   {
+		   if (user.getPassword().equalsIgnoreCase(userObj.getPassword()))
+		   {
+			   if (user.isConfirmRegistration())
+				   resp.setError(false);
+			   else
+				   resp.setMessagge("Registrazione non confermata");   
+		   }
+		   else
+			   resp.setMessagge("Password sbagliata");
+		   
+	   }
+	   
+	   return resp;
    }
   
 }

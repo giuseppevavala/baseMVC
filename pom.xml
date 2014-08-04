@@ -18,6 +18,7 @@
   
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
+    <testSourceDirectory>src/test/java</testSourceDirectory>
     <resources>
         <resource>
         	<directory>src/main/resources</directory>
@@ -56,6 +57,15 @@
   
   
   <dependencies>
+  
+  <!-- Org.Apache X il FILE UPLOAD CONTROLLER (VideoController.java) -->
+    
+    
+    <dependency>
+		<groupId>commons-fileupload</groupId>
+		<artifactId>commons-fileupload</artifactId>
+		<version>1.3.1</version>
+	</dependency>
 
    <!-- LOGGER -->
    <dependency>
@@ -116,6 +126,13 @@
 		<version>5.1.6</version>
 	</dependency>
 
+	<!-- Jasper -->
+	<dependency>
+		<groupId>jstl</groupId>
+		<artifactId>jstl</artifactId>
+		<version>1.2</version>
+	</dependency>
+	
 	<!-- JACKSON PER TRADURRE DA POJO A JSON -->  
 	<dependency>
 		<groupId>org.codehaus.jackson</groupId>

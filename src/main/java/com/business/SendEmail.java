@@ -11,12 +11,22 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+@Component
 public class SendEmail
 {
-   final static String username = "basemvc@gmail.com";
-   final static String password = "lamiapassword";
+	@Value ("${mail.user}")
+	private String username;
+
+	@Value ("${mail.password}")
+	private String password;
 	
-   public static void SendEmailConfirmRegistration (String emailTo, String token) throws UnsupportedEncodingException, MessagingException
+	@Value ("${host.name}")
+	private String host;
+	
+   public void SendEmailConfirmRegistration (String emailTo, String token) throws UnsupportedEncodingException, MessagingException
    {
       Properties props = new Properties();
 	  props.put("mail.smtp.auth", "true");
@@ -31,12 +41,12 @@ public class SendEmail
     		  });
 
       String msgBody = "Per confermare la registrazione clicca su questo link: " +
-    		  "http://localhost:8080/base/rest/token/registration?token=" + token + "&email=" + emailTo;
+    		  host + "/rest/token/registration?token=" + token + "&email=" + emailTo;
 
       Message msg = new MimeMessage(session);
-      msg.setFrom(new InternetAddress("giuse.vavala@gmail.com", "Base MVC"));
+      msg.setFrom(new InternetAddress(username, "Base MVC"));
       msg.addRecipient(Message.RecipientType.TO,
-                       new InternetAddress("giuseppe.vavala@gmail.com", "Mr. User"));
+                       new InternetAddress(emailTo, "Mr. User"));
       msg.setSubject("La tua registrazione è avvenuta con successo");
       msg.setText(msgBody);
       Transport.send(msg);
