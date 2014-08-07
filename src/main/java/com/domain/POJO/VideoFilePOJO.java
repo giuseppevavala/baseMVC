@@ -17,6 +17,14 @@ public class VideoFilePOJO {
 	private int id;
 	@Column(name="videoPath")
 	private String path = "";
+	@Column(name="duration")
+	private long duration = -1;
+	@Column(name="thumbnail")
+	private String thumbnail = "";
+	@Column(name="height")
+	private int height = -1;
+	@Column(name="width")
+	private int width = -1;
 	
 	
 	public int getId() {
@@ -32,10 +40,40 @@ public class VideoFilePOJO {
 		this.path = path;
 	}
 	
+	public long getDuration() {
+		return duration;
+	}
+	public void setDuration(long duration) {
+		this.duration = duration;
+	}
 	
+	
+	public String getThumbnail() {
+		return thumbnail;
+	}
+	public void setThumbnail(String thumbnail) {
+		this.thumbnail = thumbnail;
+	}
+	
+	
+	public int getHeight() {
+		return height;
+	}
+	public void setHeight(int height) {
+		this.height = height;
+	}
+	public int getWidth() {
+		return width;
+	}
+	public void setWidth(int width) {
+		this.width = width;
+	}
 	@Override
 	public String toString() {
-		return "VideoFilePOJO [id=" + id + ", path=" + path + "]";
+		return "VideoFilePOJO [id=" + id + ", path=" + path + ", duration="
+				+ duration + ", thumbnail=" + thumbnail + ", height=" + height
+				+ ", width=" + width + "]";
 	}
-
+	
+	
 }

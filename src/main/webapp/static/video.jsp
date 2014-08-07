@@ -1,3 +1,5 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,8 +22,11 @@
   <video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="608" height="336"
       poster="video.png"
       data-setup="{}">
-    <source src="http://localhost:8080/base/rest/stream?digitalItemId=1&videoId=1" type='video/mp4' />
-    <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+    <source src= ${videoUrl} type='video/mp4' />
+    <p class="vjs-no-js">
+    	To view this video please enable JavaScript, and consider upgrading to a web browser that 
+    	<a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+    </p>
   </video>
 
 </body>

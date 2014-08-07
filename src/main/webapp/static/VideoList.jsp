@@ -36,8 +36,19 @@
    				<td>
    					<%
    						List<VideoFilePOJO> listaFile = item.getVideoFile();
-   						if (listaFile.size() > 0) 
-   							out.println ( listaFile.get(0).getPath()); 
+   						for (VideoFilePOJO videoFile: listaFile)
+   						{
+ 					%>
+ 					
+ 					<form action="../rest/video" method="get">
+ 						<input type="hidden" name="digitalItemId" value="<%out.println ( item.getId() );%>"/>
+ 						<input type="hidden" name="videoId" value="<%out.println ( videoFile.getId() );%>"/>
+ 						<input type="submit" value="PLAY"/>
+ 					</form>
+ 					
+ 					
+ 					<%  							
+   						}
    					%>
    				</td>
    			</tr>

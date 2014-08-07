@@ -1,8 +1,6 @@
 package com.controller;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletContext;
 
@@ -21,7 +19,6 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.domain.POJO.ResponsePOJO;
 import com.domain.service.DigitalItemService;
-import com.domain.service.UserService;
 import com.exception.VideoException;
 
 
@@ -97,13 +94,20 @@ public class VideoController {
 	
 	@RequestMapping(value = "/video", method = RequestMethod.GET)
 	public String getListFile (
+			@RequestParam (value = "digitalItemId", required=false) Integer digitalItemId,
+			@RequestParam (value = "videoId", required=false) Integer videoId,
 			ModelMap model )          
 	{
-        // model.addAttribute("elenco", convertInLine (list)); 
-		
-        context.setAttribute("digitalItemService", digitalItemService);
-        
-	    return "VideoList";
+		if ((digitalItemId != null) && (videoId != null))
+		{
+			model.addAttribute("videoUrl", "../rest/stream?digitalItemId=" + digitalItemId + "&videoId=" + videoId);
+			return "video";
+		}
+		else
+		{
+			context.setAttribute("digitalItemService", digitalItemService);
+			return "VideoList";
+		}
 	}
 	
 	
