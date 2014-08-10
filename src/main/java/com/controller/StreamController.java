@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,6 +41,9 @@ public class StreamController {
 	@Autowired
 	DigitalItemService digitalItemService;
 	
+	@Value ("${video.folder.output}")
+	private String outputFolder;
+	
 	/** INIT ***/
 	public StreamController()
 	{
@@ -59,6 +63,18 @@ public class StreamController {
 			List<VideoFilePOJO> listVideo = item.getVideoFile();
 			if (listVideo.size() > 0)
 				processRequest(request, response, false, listVideo.get(0).getPath());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping(value = "/file", method = RequestMethod.GET)
+	public void streamVideo (
+			HttpServletRequest request, HttpServletResponse response,
+			@RequestParam (value="path", required=true) String path  )          
+	{
+		try {
+			processRequest(request, response, true, path);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -14,7 +14,7 @@ import com.domain.POJO.VideoFilePOJO;
 
 public class VideoFile {
 
-	private Logger logger  = LoggerFactory.getLogger(this.getClass());
+	private static Logger logger  = LoggerFactory.getLogger(VideoFile.class);
 	private long duration = -1;
 	private VideoFilePOJO videoFile = new VideoFilePOJO();
 	private File thumbnail = null;
@@ -56,8 +56,9 @@ public class VideoFile {
 	
 	private File createThumbnail() {
 		try {
-			Process proc = Runtime.getRuntime().exec("ffmpeg -i " + videoFile.getPath() 
-					+ " -y -ss " + (long) (duration*0.1) + " " + videoFile.getPath() + ".jpeg" );
+			String[] cmdarray = {"ffmpeg", "-i", videoFile.getPath(), 
+					 "-y", "-ss", "2",  videoFile.getPath() + ".jpeg" };
+			Process proc = Runtime.getRuntime().exec(cmdarray);
 			
 			proc.waitFor();
 			
@@ -76,7 +77,8 @@ public class VideoFile {
 	
 	private long readDuration() {
 		try {
-			Process proc = Runtime.getRuntime().exec("ffmpeg -i " + videoFile.getPath());
+			String[] cmdarray = {"ffmpeg", "-i", videoFile.getPath()};
+			Process proc = Runtime.getRuntime().exec(cmdarray);
 			
 			InputStream output = proc.getErrorStream();
 
@@ -105,6 +107,27 @@ public class VideoFile {
 			e.printStackTrace();
 		}
 		return -1;
+	}
+	
+	public static boolean transcodingH264 (File source, File dest)
+	{
+		try {
+			String[] cmdarray = {"ffmpeg", "-i", source.getAbsolutePath(), 
+					 "-y", "-t", "60", "-vcodec", "libx264", "-acodec", "copy", dest.getAbsolutePath()};
+			Process proc = Runtime.getRuntime().exec(cmdarray);
+			
+			InputStream output = proc.getErrorStream();
+			proc.waitFor();
+			String s = "";
+			while (output.available()  > 0)
+				s = s + (char) output.read();
+			
+			if (dest.exists())
+				return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return false;
 	}
 
 }

@@ -16,4 +16,8 @@ public class VideoFileService {
    	{
     	videoFileDAO.addObject(videoFile);
    	}
+    
+    public VideoFilePOJO getFromId(int videoFileId) {
+		return videoFileDAO.getObjWithLikeCondition("id", videoFileId);
+	}
 }

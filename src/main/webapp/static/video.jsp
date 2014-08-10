@@ -19,8 +19,8 @@
 </head>
 <body>
 
-  <video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="608" height="336"
-      poster="video.png"
+  <video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width=${width} height=${height}
+      poster=${videoThumb}
       data-setup="{}">
     <source src= ${videoUrl} type='video/mp4' />
     <p class="vjs-no-js">

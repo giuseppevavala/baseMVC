@@ -11,7 +11,6 @@ import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,22 +42,32 @@ public class Ingestion
 
 	@PostConstruct
     public void init() {
-		long period = 1000;
+		final long period = 1000;
 		
 		myLogger.debug("-------------- >>>>>>>>>>>>>>>>>>>>>> Ingestion Business <<<<<<<<<<<<<<<<<<<< ----------------");
 		(new File(outputFolder)).mkdirs();
 		(new File(inputFolder)).mkdirs();
 		
-		
 		Timer ingestionJob = new Timer();
 		TimerTask task = new TimerTask() {
 		  public void run() {
-			  lookingForNewDigitalItem();
-			  if (listFifo.size() > 0) ingestionFile();
+			  myLogger.debug("Start task");
+			  while (true)
+			  {
+				try {
+					Thread.sleep(period);
+					lookingForNewDigitalItem();
+					if (listFifo.size() > 0) 
+						ingestionFile();
+				} catch (Exception e) {
+					e.printStackTrace();
+					listFifo.clear();
+				}
+			  }
 		  }
 
 		};
-		ingestionJob.scheduleAtFixedRate(task, period, period);
+		ingestionJob.schedule(task, 1000); 
     }
 	
 	protected void ingestionFile() {
@@ -67,20 +76,23 @@ public class Ingestion
 			myLogger.debug("Ingestion: " + fileName);
 			try {
 				List<VideoFilePOJO> listVideoFile = new ArrayList<VideoFilePOJO>();
-				String destFileName = moveFile(fileName);
+				String destFileName = transcoding(fileName);
 				
-				VideoFilePOJO videoFile = new VideoFilePOJO();
-				videoFile.setPath(destFileName);
-				
-				DigitalItemPOJO item = new DigitalItemPOJO();
-				item.setTitolo(FilenameUtils.getBaseName(fileName));
-				
-
-				listVideoFile.add(videoFile);
-				item.setVideoFile(listVideoFile);	
-				
-				videoFileService.addVideoFile(videoFile);
-				digitalItemService.addDigitalItem(item);
+				if (destFileName != null)
+				{
+					VideoFile video = new VideoFile(destFileName);
+					VideoFilePOJO videoFile = video.getVideoFilePojo();
+					
+					DigitalItemPOJO item = new DigitalItemPOJO();
+					item.setTitolo(FilenameUtils.getBaseName(fileName));
+					
+					
+					listVideoFile.add(videoFile);
+					item.setVideoFile(listVideoFile);	
+					
+					videoFileService.addVideoFile(videoFile);
+					digitalItemService.addDigitalItem(item);
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -89,14 +101,18 @@ public class Ingestion
 		listFifo.clear();
 	}
 
-	private String moveFile(String fileName) throws IOException {
+	private String transcoding(String fileName) throws IOException {
 		File destFile = new File (outputFolder + "/" +FilenameUtils.getBaseName(fileName) + "-"
-				+ UUID.randomUUID() + "." + FilenameUtils.getExtension(fileName));
+				+ UUID.randomUUID() + ".mp4");
 		
 		File file = new File ( fileName );
-		FileUtils.moveFile(file, destFile );
-		
-		return destFile.getAbsolutePath();
+		if (VideoFile.transcodingH264(file, destFile))
+		{
+			file.delete();
+			return destFile.getAbsolutePath();
+		}
+		else
+			return null;
 	}
 
 	protected void lookingForNewDigitalItem() {

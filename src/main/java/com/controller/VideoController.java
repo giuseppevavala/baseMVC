@@ -1,6 +1,8 @@
 package com.controller;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletContext;
 
@@ -18,7 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.domain.POJO.ResponsePOJO;
+import com.domain.POJO.VideoFilePOJO;
 import com.domain.service.DigitalItemService;
+import com.domain.service.VideoFileService;
 import com.exception.VideoException;
 
 
@@ -35,6 +39,9 @@ public class VideoController {
 	
 	@Autowired
 	DigitalItemService digitalItemService;
+	
+	@Autowired
+	VideoFileService videoFileService;
 	
 	/** INIT ***/
 	public VideoController()
@@ -96,11 +103,16 @@ public class VideoController {
 	public String getListFile (
 			@RequestParam (value = "digitalItemId", required=false) Integer digitalItemId,
 			@RequestParam (value = "videoId", required=false) Integer videoId,
-			ModelMap model )          
+			ModelMap model ) throws UnsupportedEncodingException          
 	{
 		if ((digitalItemId != null) && (videoId != null))
 		{
+			VideoFilePOJO video = videoFileService.getFromId(videoId);
+			
 			model.addAttribute("videoUrl", "../rest/stream?digitalItemId=" + digitalItemId + "&videoId=" + videoId);
+			model.addAttribute("videoThumb", "../rest/file?path=" + URLEncoder.encode(video.getThumbnail(), "UTF-8"));
+			model.addAttribute("width", video.getWidth());
+			model.addAttribute("height", video.getHeight());
 			return "video";
 		}
 		else
