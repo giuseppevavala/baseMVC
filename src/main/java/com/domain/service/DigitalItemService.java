@@ -27,4 +27,8 @@ public class DigitalItemService {
 	public DigitalItemPOJO getFromId(int digitalItemId) {
 		return digitalItemDAO.getObjWithLikeCondition("id", digitalItemId);
 	}
+	
+	public void update (DigitalItemPOJO item ) {
+		digitalItemDAO.update(item); ;
+	}
 }

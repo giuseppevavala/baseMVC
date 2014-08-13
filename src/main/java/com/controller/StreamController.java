@@ -24,9 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.domain.POJO.DigitalItemPOJO;
 import com.domain.POJO.VideoFilePOJO;
-import com.domain.service.DigitalItemService;
 import com.domain.service.VideoFileService;
 
 
@@ -39,7 +37,7 @@ public class StreamController {
 	ServletContext context;
 	
 	@Autowired
-	DigitalItemService digitalItemService;
+	VideoFileService videoFileService;
 	
 	@Value ("${video.folder.output}")
 	private String outputFolder;
@@ -55,14 +53,11 @@ public class StreamController {
 	@RequestMapping(value = "/stream", method = RequestMethod.HEAD)
 	public void streamVideoHead (
 			HttpServletRequest request, HttpServletResponse response,
-			@RequestParam (value="digitalItemId", required=true) int digitalItemId,         
 			@RequestParam (value="videoId", required=true) int videoId  )         
 	{
 		try {
-			DigitalItemPOJO item = digitalItemService.getFromId(digitalItemId);
-			List<VideoFilePOJO> listVideo = item.getVideoFile();
-			if (listVideo.size() > 0)
-				processRequest(request, response, false, listVideo.get(0).getPath());
+			VideoFilePOJO item = videoFileService.getFromId(videoId);
+			processRequest(request, response, false, item.getPath());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -87,10 +82,8 @@ public class StreamController {
 			@RequestParam (value="videoId", required=false) Integer videoId  )          
 	{
 		try {
-			DigitalItemPOJO item = digitalItemService.getFromId(digitalItemId);
-			List<VideoFilePOJO> listVideo = item.getVideoFile();
-			if (listVideo.size() > 0)
-				processRequest(request, response, true, listVideo.get(0).getPath());
+			VideoFilePOJO item = videoFileService.getFromId(videoId);
+			processRequest(request, response, true, item.getPath());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

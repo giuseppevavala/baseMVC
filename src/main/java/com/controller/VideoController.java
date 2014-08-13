@@ -3,6 +3,8 @@ package com.controller;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.ServletContext;
 
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import com.business.VideoFile;
+import com.domain.POJO.DigitalItemPOJO;
 import com.domain.POJO.ResponsePOJO;
 import com.domain.POJO.VideoFilePOJO;
 import com.domain.service.DigitalItemService;
@@ -33,6 +37,9 @@ public class VideoController {
 		
 	@Value ("${video.folder.upload}")
 	private String resourceFolder;
+	
+	@Value ("${video.folder.output}")
+	private String outputFolder;
 			
 	@Autowired
 	ServletContext context;
@@ -101,27 +108,34 @@ public class VideoController {
 	
 	@RequestMapping(value = "/video", method = RequestMethod.GET)
 	public String getListFile (
-			@RequestParam (value = "digitalItemId", required=false) Integer digitalItemId,
-			@RequestParam (value = "videoId", required=false) Integer videoId,
 			ModelMap model ) throws UnsupportedEncodingException          
 	{
-		if ((digitalItemId != null) && (videoId != null))
-		{
-			VideoFilePOJO video = videoFileService.getFromId(videoId);
-			
-			model.addAttribute("videoUrl", "../rest/stream?digitalItemId=" + digitalItemId + "&videoId=" + videoId);
-			model.addAttribute("videoThumb", "../rest/file?path=" + URLEncoder.encode(video.getThumbnail(), "UTF-8"));
-			model.addAttribute("width", video.getWidth());
-			model.addAttribute("height", video.getHeight());
-			return "video";
-		}
-		else
-		{
-			context.setAttribute("digitalItemService", digitalItemService);
-			return "VideoList";
-		}
+		context.setAttribute("digitalItemService", digitalItemService);
+		return "browser";
 	}
 	
+	
+	@RequestMapping(value = "/video/transcode", method = RequestMethod.GET)
+	public @ResponseBody String transcodeVideo (
+			@RequestParam (value = "digitalItemId", required=true) Integer digitalItemId,
+			@RequestParam (value = "width", required=true) Integer width
+		 )          
+	{
+		DigitalItemPOJO item = digitalItemService.getFromId(digitalItemId);
+		VideoFilePOJO videoFileSrc = item.getVideoFile().get(0);
+
+		VideoFile video = VideoFile.createVideo(width, 
+				new File(videoFileSrc.getPath()), 
+				new File(outputFolder + File.separator + item.getTitolo() + UUID.randomUUID() + ".mp4"));
+		
+		List<VideoFilePOJO> listVideo = item.getVideoFile(); 
+		listVideo.add (video.getVideoFilePojo());
+		
+		videoFileService.addVideoFile(video.getVideoFilePojo());
+		digitalItemService.update(item);
+		
+		return "<p>Transcoding completato con successo</p><meta http-equiv=\"Refresh\" content=\"5;url=../video\">";
+	}
 	
 	
 }

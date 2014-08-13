@@ -39,6 +39,9 @@ public class Ingestion
 	
 	@Value ("${video.folder.output}")
 	private String outputFolder;
+	
+	@Value ("${debug}")
+	private boolean isDebug;
 
 	@PostConstruct
     public void init() {
@@ -106,7 +109,13 @@ public class Ingestion
 				+ UUID.randomUUID() + ".mp4");
 		
 		File file = new File ( fileName );
-		if (VideoFile.transcodingH264(file, destFile))
+		
+		boolean result;
+		if (isDebug)
+			result = VideoFile.transcodingH264Trailer(file, destFile);
+		else
+			result = VideoFile.transcodingH264(file, destFile);
+		if (result)
 		{
 			file.delete();
 			return destFile.getAbsolutePath();

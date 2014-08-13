@@ -109,11 +109,57 @@ public class VideoFile {
 		return -1;
 	}
 	
-	public static boolean transcodingH264 (File source, File dest)
+	
+	// ffmpeg -i input.mp4 -filter:v scale=720:-1 -c:a copy output.mp4
+	public static VideoFile createVideo (int width, File src, File dest )
 	{
 		try {
+			String[] cmdarray = {"ffmpeg", "-i", src.getAbsolutePath(), 
+					"-y", "-filter:v", "scale=" + width + ":-1", "-c:a", "copy", dest.getAbsolutePath()};
+			Process proc = Runtime.getRuntime().exec(cmdarray);
+			
+			InputStream output = proc.getErrorStream();
+			proc.waitFor();
+			String s = "";
+			while (output.available()  > 0)
+				s = s + (char) output.read();
+			
+			if (dest.exists())
+				return new VideoFile (dest.getAbsolutePath());			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return null;
+	}
+	
+	public static boolean transcodingH264Trailer (File source, File dest)
+	{
+		try {
+			
 			String[] cmdarray = {"ffmpeg", "-i", source.getAbsolutePath(), 
 					 "-y", "-t", "60", "-vcodec", "libx264", "-acodec", "copy", dest.getAbsolutePath()};
+			Process proc = Runtime.getRuntime().exec(cmdarray);
+			
+			InputStream output = proc.getErrorStream();
+			proc.waitFor();
+			String s = "";
+			while (output.available()  > 0)
+				s = s + (char) output.read();
+			
+			if (dest.exists())
+				return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		return false;
+	}
+
+
+	public static boolean transcodingH264 (File source, File dest) {
+		try {
+			
+			String[] cmdarray = {"ffmpeg", "-i", source.getAbsolutePath(), 
+					 "-y", "-vcodec", "libx264", "-acodec", "copy", dest.getAbsolutePath()};
 			Process proc = Runtime.getRuntime().exec(cmdarray);
 			
 			InputStream output = proc.getErrorStream();

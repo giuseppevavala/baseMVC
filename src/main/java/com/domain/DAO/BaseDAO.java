@@ -5,6 +5,7 @@ import javax.annotation.Resource;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Restrictions;
 
 
@@ -57,7 +58,7 @@ public class BaseDAO<T>{
     @SuppressWarnings("unchecked")
 	public List<T> getAll(){
 		Session session = getSession();
-        List<T> list = session.createCriteria(getInterfaceClass()).list();
+        List<T> list = session.createCriteria(getInterfaceClass()).setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY).list();
 
         session.getTransaction().commit();
         session.close();
