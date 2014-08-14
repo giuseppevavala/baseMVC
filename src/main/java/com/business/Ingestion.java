@@ -131,7 +131,7 @@ public class Ingestion
 		{
 			for (File file : list) {
 				String fileAbsPath = file.getAbsolutePath();
-				if (!listFifo.contains(fileAbsPath))
+				if ((!listFifo.contains(fileAbsPath)) && (!FilenameUtils.getBaseName(file.getAbsolutePath()).startsWith(".")))
 				{
 					myLogger.debug("NEW FILE " + file);
 					listFifo.add(fileAbsPath);
