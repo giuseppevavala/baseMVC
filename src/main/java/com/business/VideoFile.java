@@ -113,67 +113,127 @@ public class VideoFile {
 	// ffmpeg -i input.mp4 -filter:v scale=720:-1 -c:a copy output.mp4
 	public static VideoFile createVideo (int width, File src, File dest )
 	{
+		ConsumeOutputThread thread = null;
 		try {
 			String[] cmdarray = {"ffmpeg", "-i", src.getAbsolutePath(), 
 					"-y", "-filter:v", "scale=" + width + ":-1", "-c:a", "copy", dest.getAbsolutePath()};
+			
+			
+			logger.debug("TRANSCODING START");
 			Process proc = Runtime.getRuntime().exec(cmdarray);
-			
-			InputStream output = proc.getErrorStream();
+			thread = consumeOutput(proc);
 			proc.waitFor();
-			String s = "";
-			while (output.available()  > 0)
-				s = s + (char) output.read();
-			
-			if (dest.exists())
-				return new VideoFile (dest.getAbsolutePath());			
+			logger.debug("TRANSCODING FINISHED");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
-		return null;
+		
+		thread.stopThread();
+		if (dest.exists())
+			return new VideoFile (dest.getAbsolutePath());		
+		else
+			return null;
 	}
 	
 	public static boolean transcodingH264Trailer (File source, File dest)
 	{
+		ConsumeOutputThread thread = null;
 		try {
 			
 			String[] cmdarray = {"ffmpeg", "-i", source.getAbsolutePath(), 
 					 "-y", "-t", "60", "-vcodec", "libx264", "-acodec", "copy", dest.getAbsolutePath()};
+			
+			logger.debug("TRANSCODING START");
 			Process proc = Runtime.getRuntime().exec(cmdarray);
-			
-			InputStream output = proc.getErrorStream();
+			thread = consumeOutput(proc);
 			proc.waitFor();
-			String s = "";
-			while (output.available()  > 0)
-				s = s + (char) output.read();
+			logger.debug("TRANSCODING FINISHED");
 			
-			if (dest.exists())
-				return true;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
-		return false;
+		
+		thread.stopThread();
+		if (dest.exists())
+			return true;
+		else
+			return false;
 	}
 
 
 	public static boolean transcodingH264 (File source, File dest) {
+		ConsumeOutputThread thread = null;
 		try {
 			
 			String[] cmdarray = {"ffmpeg", "-i", source.getAbsolutePath(), 
 					 "-y", "-vcodec", "libx264", "-acodec", "copy", dest.getAbsolutePath()};
+			logger.debug("TRANSCODING START");
 			Process proc = Runtime.getRuntime().exec(cmdarray);
-			
-			InputStream output = proc.getErrorStream();
+			thread = consumeOutput(proc);
 			proc.waitFor();
-			String s = "";
-			while (output.available()  > 0)
-				s = s + (char) output.read();
+			logger.debug("TRANSCODING FINISHED");
 			
-			if (dest.exists())
-				return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
-		return false;
+		
+		thread.stopThread();
+		
+		if (dest.exists())
+			return true;
+		else
+			return false;
 	}
+	
+	private static ConsumeOutputThread consumeOutput (final Process proc)
+	{
+		ConsumeOutputThread thread = new ConsumeOutputThread(proc, logger);
+		thread.start();
+		return thread;
+	}
+}
 
+class ConsumeOutputThread extends Thread
+{
+	private Process proc;
+	private boolean run = true;
+	private Logger logger;
+
+	public ConsumeOutputThread(Process proc, Logger logger) {
+		this.proc = proc;
+		this.logger = logger;
+	}
+	
+	@Override
+	public void run() {
+		super.run();
+		
+		InputStream error = proc.getErrorStream();
+		InputStream output = proc.getInputStream();
+		while (run )
+		{
+			try {
+				String stringOutput = "";
+				String stringError = "";
+				
+				while (error.available() > 0)
+					stringOutput = stringOutput + (char) error.read();
+				while (output.available() > 0)
+					stringError = stringError + (char)  output.read();
+				
+				if (stringOutput.length() > 0)logger.debug(stringOutput);
+				if (stringError.length() > 0)logger.debug(stringError);
+				
+				Thread.sleep(500);
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
+		}
+	}
+	
+	
+	public void stopThread (){
+		run = false;
+	}
 }
